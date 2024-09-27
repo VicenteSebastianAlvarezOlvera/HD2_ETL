@@ -36,10 +36,10 @@ The data base to be used in this project is ______.
 I've decided to give it the following structure: 
 
 #### Planet information
-|Index|Planet name|Current owner|Initial Owner|Biome|Sector|X Coordinate|Y Coordinate|Status|ç
+ | Index | Planet name | Current owner | Initial Owner | Biome | Sector | X Coordinate | Y Coordinate | Status | 
 
 #### Player Count
-|Time|Index|Player Count|Owner|
+ | Time | Index | Player Count | Owner | 
 
 #### Battle Information
-|Time|Index|Current Owner|Mission Success Rate|Current Kill Death Ratio|Total Deaths|Terminid Kills|Automaton Kills|
+ | Time | Index | Current Owner | Mission Success Rate | Current Kill Death Ratio | Total Deaths | Terminid Kills | Automaton Kills | 
