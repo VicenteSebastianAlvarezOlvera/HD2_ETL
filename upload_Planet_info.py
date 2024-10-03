@@ -5,15 +5,21 @@ from datetime import datetime
 
 import pyodbc
 
-# Establish the connection
+import os 
+from dotenv import load_dotenv
+
+ip = os.getenv('IP')
+database = os.getenv('DB_NAME')
+uid = os.getenv('DB_USER')
+password = os.getenv('DB_PASSWORD')
+
 conn = pyodbc.connect(
     'DRIVER={ODBC Driver 17 for SQL Server};'
-    'SERVER=172.31.96.27;'
-    'DATABASE=HD2ETl;'
-    'UID=sa;'
-    'PWD=giantGr4pe12!'
+    f'SERVER={ip};'
+    f'DATABASE={database};'
+    f'UID={uid};'
+    f'PWD={password}!'
 )
-
 # Create a cursor
 cursor = conn.cursor()
 
