@@ -26,6 +26,11 @@ I would like to create a dashboard that is similar between both Tableau and Powe
 * Save the data to a DB: Probably sqlserver, maybe hosted locally, maybe hosted in (azure/aws) for students
 * From the DB, create a dashboard both in Tableau and Power BI.
 
+## The tools 
+* Apache Airflow: to schedule gathering the data every set amount of time
+* SQL server: To store the data locally
+* Python: To get and process the data
+
 ## The process
 ### Getting the data
 The first step we need to do is submit a request to said URLs. This is how we will be getting our data. Given that we are going to be using Python for this project, the code shown will be Python.
@@ -115,8 +120,7 @@ This will get us the response, which has the following format:
 ]
 ```
 
-We need to process this data first before we are able to use it. To do so, we first convert it to a json object with:
-`data = raw_data.json()`
+We need to process this data first before we are able to use it. To do so, we first convert it to a json object with: `data = raw_data.json()`. Doing this converts the data to a list
 
 This way, we are now able to manipulate the data itself.
 ### Processing the data
@@ -129,20 +133,12 @@ planet_data = []
 for i in range (len(data)):
     index = data[i].get('index')
     planet_name = data[i].get('name')
-    current_owner = data[i].get('currentOwner')
     initial_owner = data[i].get('initialOwner')
     biome = data[i]['biome'].get('name')
     sector = data[i].get('sector')
     x_coordinate = data[i]['position'].get('x')
     y_coordinate = data[i]['position'].get('y')
-    status = ''
-    if data[i].get('health') != 1000000:
-        status = 'Liberation campaing'
-    elif data[i].get('event') != None:
-        status = 'Defense campaing'
-    else:
-        status = 'Disabled'
-    planet_data.append([index, planet_name, current_owner, initial_owner, biome, sector, x_coordinate, y_coordinate, status])
+    planet_data.append([index, planet_name, initial_owner, biome, sector, x_coordinate, y_coordinate])
 ```
 
 
