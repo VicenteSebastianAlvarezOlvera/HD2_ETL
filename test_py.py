@@ -1,6 +1,7 @@
 import pyodbc
 import os 
 from dotenv import load_dotenv
+load_dotenv()
 
 ip = os.getenv('IP')
 database = os.getenv('DB_NAME')
@@ -12,7 +13,7 @@ conn = pyodbc.connect(
     f'SERVER={ip};'
     f'DATABASE={database};'
     f'UID={uid};'
-    f'PWD={password}!'
+    f'PWD={password};'
 )
 
 

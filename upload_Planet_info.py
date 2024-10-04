@@ -1,12 +1,9 @@
 import requests
-import json
-import pandas as pd
-from datetime import datetime
-
 import pyodbc
 
 import os 
 from dotenv import load_dotenv
+load_dotenv()
 
 ip = os.getenv('IP')
 database = os.getenv('DB_NAME')
@@ -18,13 +15,12 @@ conn = pyodbc.connect(
     f'SERVER={ip};'
     f'DATABASE={database};'
     f'UID={uid};'
-    f'PWD={password}!'
+    f'PWD={password};'
 )
-# Create a cursor
+
 cursor = conn.cursor()
 
-
-raw_data = requests.get('https://api.helldivers2.dev/api/v1/planets') #Main source of information
+raw_data = requests.get('https://api.helldivers2.dev/api/v1/planets') 
 data = raw_data.json()
 planet_data = []
 for i in range (len(data)):
@@ -45,9 +41,7 @@ insert_query = """
 for planet in planet_data:
     cursor.execute(insert_query, planet)
 
-# Commit the transaction
 conn.commit()
 
-# Close the connection
 cursor.close()
 conn.close()
