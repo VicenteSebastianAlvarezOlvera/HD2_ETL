@@ -382,6 +382,7 @@ WHERE time_stamp IN (SELECT max(time_stamp) FROM active_planets);
 | CLAORELL | Liberation campaign | 0.669419 | Automaton |
 | PANDION-XXIV | Liberation campaign | 0.465891 | Terminids |
 
+
 ### Automating data collection
 Once the data has been verified, we need to automate the data collection, which will allow us to track the data. 
 
@@ -440,3 +441,41 @@ Using the already available data, I was able to create the following graphs:
 #### Timeline of liberation progress per planet (Area chart)
 ![Timeline of liberation progress per planet](https://media.discordapp.net/attachments/774336764517023799/1293684825777242168/image.png?ex=67084561&is=6706f3e1&hm=6a67ad396c2114cdf39e29c84fb32f86e6e16580f1d04fa408b2a60ce03aa7fb&=&format=webp&quality=lossless "Players by faction and planet")
 
+### Identifying outliers
+There seems to be a bug in the API affecting planet statistics at random intervals, which shows consistent numbers every time this bug happens.
+I managed to identify this bug while doing a total enemy kills timeline, which showed a very significant outlier, in which a number was always consistent:
+
+> The sum of terminid kills for a specific timestamp always was equal to: 795792 
+
+Running the following query showed me that this bug had happened 45 times while recolecting the data.
+
+```
+SELECT time_stamp, SUM(terminid_kills) 
+FROM planet_statistics 
+GROUP BY time_stamp 
+HAVING SUM(terminid_kills) = 795792
+```
+
+Given that the sum is always the same when the bug happens, I added a condition to prevent this, checking that the amount of terminid kills is different than the bugged amount:
+
+```
+if data[0]['statistics'].get('terminidKills') == 1277:
+```
+
+If this condition is met, then the data from planet statisctics will be uploaded, otherwise it will be skipped.
+
+In order to remove the already saved bugged data, I ran this query:
+
+``` 
+DELETE FROM planet_statistics 
+WHERE time_stamp IN 
+(
+  SELECT time_stamp 
+  FROM planet_statistics 
+  GROUP BY time_stamp 
+  HAVING SUM(terminid_kills) = 795792
+)
+```
+
+### Using cloud technologies
+(PENDING)
