@@ -167,7 +167,7 @@ The data base to be used in this project is SQL Server, first installed in Ubunt
 
 I've decided to give it the following structure: 
 
-![Database Schema](https://media.discordapp.net/attachments/774336764517023799/1294384923091665006/image.png?ex=670ad166&is=67097fe6&hm=66b175cb6f31461f5fd8ef3bbdc00d378b3c8b1f957ed2a4cd4c6983f46778d3&=&format=webp&quality=lossless&width=992&height=670 "Database Schema")
+![Database Schema](https://media.discordapp.net/attachments/774336764517023799/1294384923091665006/image.png?ex=6710c026&is=670f6ea6&hm=19a73695ee8d263de17ec648c6406b9f5e1f40658f2de8da8024c64d8c90a290&=&format=webp&quality=lossless&width=992&height=670 "Database Schema")
 
 #### Planet information
 
