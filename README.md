@@ -131,24 +131,43 @@ First, we have to decide what we are going to need. Given what I what to accompl
 
 The first list will take into account the data for the planets and their status
 ```
-planet_data = []
+player_count_list = []
+planet_ownership = []
+planet_stats = []
 for i in range (len(data)):
+    playable_faction = ''
     index = data[i].get('index')
-    planet_name = data[i].get('name')
-    initial_owner = data[i].get('initialOwner')
-    biome = data[i]['biome'].get('name')
-    sector = data[i].get('sector')
-    x_coordinate = data[i]['position'].get('x')
-    y_coordinate = data[i]['position'].get('y')
-    planet_data.append([index, planet_name, initial_owner, biome, sector, x_coordinate, y_coordinate])
+    current_owner = data[i].get('currentOwner')
+    missionsWon = data[i]['statistics'].get('missionsWon')
+    missionsLost = data[i]['statistics'].get('missionsLost')
+    missionTime = data[i]['statistics'].get('missionTime')
+    terminidKills = data[i]['statistics'].get('terminidKills')
+    automatonKills = data[i]['statistics'].get('automatonKills')
+    illuminateKills = data[i]['statistics'].get('illuminateKills')
+    bulletsFired = data[i]['statistics'].get('bulletsFired')
+    bulletsHit = data[i]['statistics'].get('bulletsHit')
+    deaths = data[i]['statistics'].get('deaths')
+    friendlies = data[i]['statistics'].get('friendlies')
+    if data[i].get('event') == None:
+        playable_faction = current_owner
+    else: 
+        playable_faction = data[i].get('event').get('faction')
+    player_count = data[i]['statistics'].get('playerCount')
+    player_count_list.append([current_date, index, player_count, playable_faction])
+    planet_ownership.append([current_date, index, current_owner])
+    planet_stats.append([current_date, index, terminidKills,automatonKills, illuminateKills, deaths, bulletsFired, bulletsHit, missionsWon, missionsLost, missionTime, friendlies])
+
 ```
 
+Once we have all the data we need, we will then add it to the database, as shown below
 
 
 ### The Database
 The data base to be used in this project is SQL Server, first installed in Ubuntu 20.04.5
 
 I've decided to give it the following structure: 
+
+![Database Schema](https://media.discordapp.net/attachments/774336764517023799/1294384923091665006/image.png?ex=670ad166&is=67097fe6&hm=66b175cb6f31461f5fd8ef3bbdc00d378b3c8b1f957ed2a4cd4c6983f46778d3&=&format=webp&quality=lossless&width=992&height=670 "Database Schema")
 
 #### Planet information
 
@@ -366,12 +385,13 @@ WHERE time_stamp IN (SELECT max(time_stamp) FROM active_planets);
 ### Automating data collection
 Once the data has been verified, we need to automate the data collection, which will allow us to track the data. 
 
-A dag was set up to run every 10 minutes using [Apache Airflow](https://airflow.apache.org/).
-
+A dag was set up to run every 10 minutes using [Apache Airflow](https://airflow.apache.org/). This way, we are able to track consistenly the main changes in activity, while mantaining a balance of valuable information and space used
 
 
 ### Working on the dashboard
 Now that some data has been collected, work on Power Bi was started. Given that a relationship was established between the `Planet_data` and the rest of the tables, the labels can be set with the name of the planets, instead of their ids.
+
+We will need to add some measures to calculate some missing values, or add certain conditions for specific graphs
 
 Using the already available data, I was able to create the following graphs:
 
@@ -419,3 +439,4 @@ Using the already available data, I was able to create the following graphs:
 
 #### Timeline of liberation progress per planet (Area chart)
 ![Timeline of liberation progress per planet](https://media.discordapp.net/attachments/774336764517023799/1293684825777242168/image.png?ex=67084561&is=6706f3e1&hm=6a67ad396c2114cdf39e29c84fb32f86e6e16580f1d04fa408b2a60ce03aa7fb&=&format=webp&quality=lossless "Players by faction and planet")
+
